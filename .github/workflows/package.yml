@@ -1,0 +1,43 @@
+name: Package extension
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Create packaged artifact
+        id: package
+        run: |
+          BRANCH_NAME=${{ github.ref_name }}
+          # sanitize branch name for semver/prerelease component
+          SANITIZED=$(echo "$BRANCH_NAME" | sed 's/[^A-Za-z0-9._-]/-/g')
+          VERSION=$(node -p "require('./package.json').version")
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            ART_VERSION="$VERSION"
+          else
+            ART_VERSION="$VERSION-${SANITIZED}.${{ github.run_number }}"
+          fi
+          ART_NAME="multi-closer-${ART_VERSION}.zip"
+          # zip the dist/ directory into the artifact
+          cd dist
+          zip -r "../${ART_NAME}" .
+          cd ..
+          echo "artifact=${ART_NAME}" >> $GITHUB_OUTPUT
+          echo "artifact_name=${ART_NAME}" >> $GITHUB_ENV
+      - name: Upload packaged artifact
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: ${{ env.artifact_name }}
+          path: ${{ env.artifact_name }}
+          retention-days: 7
