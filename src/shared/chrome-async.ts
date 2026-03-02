@@ -28,7 +28,7 @@ export const createContextMenu = (options: chrome.contextMenus.CreateProperties)
 
 export const updateContextMenu = (
   menuId: string,
-  options: chrome.contextMenus.UpdateProperties,
+  options: Omit<chrome.contextMenus.CreateProperties, 'id'>,
 ): Promise<void> =>
   new Promise((resolve, reject) => {
     chrome.contextMenus.update(menuId, options, () => {
