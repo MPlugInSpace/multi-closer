@@ -37,7 +37,7 @@ const createMenu = async (): Promise<void> => {
   await createContextMenu({
     id: MENU_ID,
     title: 'Close all tabs from <domain>',
-    contexts: ['tab'] as unknown as chrome.contextMenus.ContextType[],
+    contexts: [chrome.contextMenus.ContextType.ACTION],
   });
 };
 
