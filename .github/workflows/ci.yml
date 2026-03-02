@@ -40,10 +40,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
-      - name: Setup Playwright browsers and dependencies
-        uses: microsoft/playwright-github-action@v1
-        with:
-          install-deps: true
+      - name: Install Playwright browsers and dependencies
+        run: npx playwright install --with-deps
       - name: Run E2E
         run: CI=true xvfb-run -a npm run e2e
       - name: Upload E2E artifacts on failure
