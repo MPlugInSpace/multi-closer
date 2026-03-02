@@ -1,0 +1,42 @@
+name: Release
+
+# Only run after CI has passed on the same commit.
+# This ensures no artifact is ever produced from a commit that fails lint,
+# tests, or E2E — even if someone pushes directly to main or a feature branch.
+on:
+  workflow_run:
+    workflows: ['CI']
+    types: [completed]
+    branches:
+      - main
+      - 'feature/*'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    # Gate on CI success — skip if CI failed or was cancelled.
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          # workflow_run does not carry the triggering SHA automatically; pin it.
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      # version.mjs stamps the correct version into dist/manifest.json and
+      # package.json in-workspace only. Changes are NOT committed back to the repo.
+      - run: node scripts/version.mjs
+        env:
+          GITHUB_REF_NAME: ${{ github.event.workflow_run.head_branch }}
+          GITHUB_RUN_NUMBER: ${{ github.event.workflow_run.run_number }}
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: extension-build
+          path: dist/

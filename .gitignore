@@ -1,0 +1,9 @@
+node_modules/
+dist/
+dist-test/
+*.zip
+.DS_Store
+coverage/
+*.log
+.env
+e2e/.user-data/
