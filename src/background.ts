@@ -16,7 +16,24 @@ const getActiveTab = async (windowId?: number): Promise<chrome.tabs.Tab | null> 
 const updateMenuTitle = async (tab?: chrome.tabs.Tab): Promise<void> => {
   const host = tab?.url ? getHost(tab.url) : null;
   const title = host ? `Close all tabs from ${host}` : 'Close all tabs from <domain>';
-  await updateContextMenu(MENU_ID, { title });
+  try {
+    await updateContextMenu(MENU_ID, { title });
+  } catch {
+    // If the menu doesn't exist yet, attempt to create it. Creation may fail
+    // if another concurrent startup path creates the menu — ignore errors.
+    try {
+      await createContextMenu({
+        id: MENU_ID,
+        title,
+        contexts: [
+          'tab' as unknown as chrome.contextMenus.ContextType,
+          'action' as unknown as chrome.contextMenus.ContextType,
+        ],
+      });
+    } catch {
+      // ignore
+    }
+  }
 };
 
 const handleClick = async (tab?: chrome.tabs.Tab): Promise<void> => {
@@ -34,10 +51,22 @@ const handleClick = async (tab?: chrome.tabs.Tab): Promise<void> => {
  * recreate — here. Use syncMenuTitle() on subsequent startups instead.
  */
 const createMenu = async (): Promise<void> => {
+  // Try updating first in case the menu already exists; otherwise create it.
+  try {
+    await updateContextMenu(MENU_ID, { title: 'Close all tabs from <domain>' });
+    return;
+  } catch {
+    // fallthrough to create if update failed (menu not found)
+  }
+
   await createContextMenu({
     id: MENU_ID,
     title: 'Close all tabs from <domain>',
-    contexts: [chrome.contextMenus.ContextType.ACTION],
+    // show the menu in the tab context (right-click a tab) and also on the extension action
+    contexts: [
+      'tab' as unknown as chrome.contextMenus.ContextType,
+      'action' as unknown as chrome.contextMenus.ContextType,
+    ],
   });
 };
 
@@ -110,3 +139,11 @@ chrome.tabs.onUpdated.addListener((_tabId, changeInfo, tab) => {
     void updateMenuTitle(tab);
   }
 });
+
+// Ensure menu exists when the service worker starts (dev/load-unpacked flows may not
+// trigger onInstalled). This is a best-effort call — ignore startup errors.
+try {
+  void createMenu().then(syncMenuTitle);
+} catch {
+  // ignore
+}
