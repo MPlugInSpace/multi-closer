@@ -139,3 +139,10 @@ Package extension
 
 - No Cursor or Copilot rules detected. If added later, incorporate them here.
 - Keep AGENTS.md around 150 lines; update when workflows change.
+
+## Active Technologies
+- TypeScript 5.x (Node.js >=20 for tooling) + WebExtension APIs, esbuild, Vitest, Playwright (001-close-domain-tabs)
+- N/A (no persistent user/browsing data) (001-close-domain-tabs)
+
+## Recent Changes
+- 001-close-domain-tabs: Added TypeScript 5.x (Node.js >=20 for tooling) + WebExtension APIs, esbuild, Vitest, Playwright
