@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { getHost, isMatchingHost } from '../src/shared/domain';
+import { getCloseMenuTitle, getHost, isMatchingHost } from '../src/shared/domain';
 
 describe('isMatchingHost', () => {
   it('matches exact host', () => {
@@ -21,6 +21,10 @@ describe('getHost', () => {
     expect(getHost('http://example.test:3000/path')).toBe('example.test:3000');
   });
 
+  it('normalizes host to lowercase and trims trailing dot', () => {
+    expect(getHost('https://Example.TEST./path')).toBe('example.test');
+  });
+
   it('returns host for https url', () => {
     expect(getHost('https://sub.example.test')).toBe('sub.example.test');
   });
@@ -31,5 +35,15 @@ describe('getHost', () => {
 
   it('returns null for invalid url', () => {
     expect(getHost('not a url')).toBeNull();
+  });
+});
+
+describe('getCloseMenuTitle', () => {
+  it('returns placeholder title when host is null', () => {
+    expect(getCloseMenuTitle(null)).toBe('Close all tabs from <domain>');
+  });
+
+  it('returns host-specific title when host is present', () => {
+    expect(getCloseMenuTitle('docs.example.com')).toBe('Close all tabs from docs.example.com');
   });
 });

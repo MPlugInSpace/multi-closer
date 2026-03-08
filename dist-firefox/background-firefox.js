@@ -24,22 +24,29 @@
 
   // src/shared/domain.ts
   var isHttpUrl = (url) => url.startsWith("http://") || url.startsWith("https://");
+  var normalizeHost = (host) => host.trim().toLowerCase().replace(/\.$/, "");
   var getHost = (url) => {
     if (!isHttpUrl(url)) {
       return null;
     }
     try {
-      return new URL(url).host;
+      return normalizeHost(new URL(url).host);
     } catch {
       return null;
     }
   };
   var isMatchingHost = (targetHost, candidateHost) => {
-    return candidateHost === targetHost || candidateHost.endsWith(`.${targetHost}`);
+    const normalizedTarget = normalizeHost(targetHost);
+    const normalizedCandidate = normalizeHost(candidateHost);
+    return normalizedCandidate === normalizedTarget || normalizedCandidate.endsWith(`.${normalizedTarget}`);
   };
+  var getCloseMenuTitle = (host) => host ? `Close all tabs from ${host}` : "Close all tabs from <domain>";
 
   // src/shared/close-tabs.ts
   var closeMatchingTabs = async (rootHost) => {
+    if (rootHost.trim() === "") {
+      return 0;
+    }
     const tabs = await queryTabs({});
     const toClose = tabs.filter((tab) => {
       if (typeof tab.url !== "string") return false;
@@ -65,7 +72,7 @@
   };
   var updateMenuTitle = async (tab) => {
     const host = tab?.url ? getHost(tab.url) : null;
-    const title = host ? `Close all tabs from ${host}` : "Close all tabs from <domain>";
+    const title = getCloseMenuTitle(host);
     try {
       await updateContextMenu(MENU_ID, { title });
     } catch {
@@ -84,13 +91,13 @@
   };
   var createMenu = async () => {
     try {
-      await updateContextMenu(MENU_ID, { title: "Close all tabs from <domain>" });
+      await updateContextMenu(MENU_ID, { title: getCloseMenuTitle(null) });
       return;
     } catch {
     }
     await createContextMenu({
       id: MENU_ID,
-      title: "Close all tabs from <domain>",
+      title: getCloseMenuTitle(null),
       contexts: MENU_CONTEXTS
     });
   };

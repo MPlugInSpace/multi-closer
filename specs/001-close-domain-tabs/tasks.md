@@ -21,10 +21,10 @@ description: 'Task list for implementing cross-browser domain tab close'
 
 **Purpose**: Align build/test scaffolding for the feature branch.
 
-- [ ] T001 Verify and document feature artifact layout in specs/001-close-domain-tabs/quickstart.md
-- [ ] T002 Align build output expectations for dist and dist-firefox in build.mjs
-- [ ] T003 [P] Ensure repository ignore rules cover local artifact download dirs in .gitignore
-- [ ] T004 [P] Add/refresh spec-task traceability notes in specs/001-close-domain-tabs/plan.md
+- [x] T001 Verify and document feature artifact layout in specs/001-close-domain-tabs/quickstart.md
+- [x] T002 Align build output expectations for dist and dist-firefox in build.mjs
+- [x] T003 [P] Ensure repository ignore rules cover local artifact download dirs in .gitignore
+- [x] T004 [P] Add/refresh spec-task traceability notes in specs/001-close-domain-tabs/plan.md
 
 ---
 
@@ -34,12 +34,12 @@ description: 'Task list for implementing cross-browser domain tab close'
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T005 Implement host parsing and validation hardening in src/shared/domain.ts
-- [ ] T006 Implement safe tab query/filter primitives for closure inputs in src/shared/close-tabs.ts
-- [ ] T007 Implement context menu create/update resilience baseline in src/background.ts
-- [ ] T008 [P] Add foundational unit coverage for host matching invariants in tests/domain.test.ts
-- [ ] T009 [P] Add foundational unit coverage for close filtering invariants in tests/close-tabs.test.ts
-- [ ] T010 Add artifact installability baseline assertions for both targets in tests/installability.test.ts
+- [x] T005 Implement host parsing and validation hardening in src/shared/domain.ts
+- [x] T006 Implement safe tab query/filter primitives for closure inputs in src/shared/close-tabs.ts
+- [x] T007 Implement context menu create/update resilience baseline in src/background.ts
+- [x] T008 [P] Add foundational unit coverage for host matching invariants in tests/domain.test.ts
+- [x] T009 [P] Add foundational unit coverage for close filtering invariants in tests/close-tabs.test.ts
+- [x] T010 Add artifact installability baseline assertions for both targets in tests/installability.test.ts
 
 **Checkpoint**: Foundation supports deterministic matching, safe no-op behavior, and dual-target install checks.
 
@@ -53,17 +53,17 @@ description: 'Task list for implementing cross-browser domain tab close'
 
 ### Tests for User Story 1
 
-- [ ] T011 [P] [US1] Add same-host closure scenario coverage in tests/close-tabs.test.ts
-- [ ] T012 [P] [US1] Add subdomain closure and parent-domain exclusion coverage in tests/close-tabs.test.ts
-- [ ] T013 [US1] Add menu label host rendering behavior test coverage in tests/domain.test.ts
+- [x] T011 [P] [US1] Add same-host closure scenario coverage in tests/close-tabs.test.ts
+- [x] T012 [P] [US1] Add subdomain closure and parent-domain exclusion coverage in tests/close-tabs.test.ts
+- [x] T013 [US1] Add menu label host rendering behavior test coverage in tests/domain.test.ts
 
 ### Implementation for User Story 1
 
-- [ ] T014 [P] [US1] Implement menu title derivation from initiating tab host in src/background.ts
-- [ ] T015 [US1] Implement click handler flow from initiating tab to closeMatchingTabs in src/background.ts
-- [ ] T016 [US1] Implement strict same-host/subdomain-only closure predicate integration in src/shared/close-tabs.ts
-- [ ] T017 [US1] Implement parent-domain exclusion guard in src/shared/domain.ts
-- [ ] T018 [US1] Wire tab/window event-driven menu title sync behavior in src/background.ts
+- [x] T014 [P] [US1] Implement menu title derivation from initiating tab host in src/background.ts
+- [x] T015 [US1] Implement click handler flow from initiating tab to closeMatchingTabs in src/background.ts
+- [x] T016 [US1] Implement strict same-host/subdomain-only closure predicate integration in src/shared/close-tabs.ts
+- [x] T017 [US1] Implement parent-domain exclusion guard in src/shared/domain.ts
+- [x] T018 [US1] Wire tab/window event-driven menu title sync behavior in src/background.ts
 
 **Checkpoint**: US1 is independently functional and testable as MVP.
 
@@ -77,16 +77,16 @@ description: 'Task list for implementing cross-browser domain tab close'
 
 ### Tests for User Story 2
 
-- [ ] T019 [P] [US2] Add installability assertions for Chromium and Firefox manifests in tests/installability.test.ts
-- [ ] T020 [P] [US2] Add E2E coverage for close action invocation path in e2e/tests/close-tabs.mjs
+- [x] T019 [P] [US2] Add installability assertions for Chromium and Firefox manifests in tests/installability.test.ts
+- [x] T020 [P] [US2] Add E2E coverage for close action invocation path in e2e/tests/close-tabs.mjs
 
 ### Implementation for User Story 2
 
-- [ ] T021 [US2] Ensure Chromium-compatible action/menu contexts are defined correctly in src/background.ts
-- [ ] T022 [US2] Ensure fallback action flow for constrained contexts via popup messaging in src/popup/popup.ts
-- [ ] T023 [US2] Ensure Firefox-compatible build output generation and manifest transformation in build.mjs
-- [ ] T024 [US2] Ensure package workflow includes both dist and dist-firefox outputs in .github/workflows/package.yml
-- [ ] T025 [US2] Update local verification instructions for both browser paths in README.md
+- [x] T021 [US2] Ensure Chromium-compatible action/menu contexts are defined correctly in src/background.ts
+- [x] T022 [US2] Ensure fallback action flow for constrained contexts via popup messaging in src/popup/popup.ts
+- [x] T023 [US2] Ensure Firefox-compatible build output generation and manifest transformation in build.mjs
+- [x] T024 [US2] Ensure package workflow includes both dist and dist-firefox outputs in .github/workflows/package.yml
+- [x] T025 [US2] Update local verification instructions for both browser paths in README.md
 
 **Checkpoint**: US1 and US2 are independently testable with dual-target install validation.
 
@@ -100,15 +100,15 @@ description: 'Task list for implementing cross-browser domain tab close'
 
 ### Tests for User Story 3
 
-- [ ] T026 [P] [US3] Add non-http(s) initiating tab no-op coverage in tests/close-tabs.test.ts
-- [ ] T027 [P] [US3] Add invalid URL and missing-tab edge-case coverage in tests/domain.test.ts
-- [ ] T028 [US3] Add privacy/behavior contract assertions for local-only processing in tests/installability.test.ts
+- [x] T026 [P] [US3] Add non-http(s) initiating tab no-op coverage in tests/close-tabs.test.ts
+- [x] T027 [P] [US3] Add invalid URL and missing-tab edge-case coverage in tests/domain.test.ts
+- [x] T028 [US3] Add privacy/behavior contract assertions for local-only processing in tests/installability.test.ts
 
 ### Implementation for User Story 3
 
-- [ ] T029 [US3] Enforce non-http(s) and invalid URL no-op handling in src/background.ts
-- [ ] T030 [US3] Enforce no-persist/no-telemetry behavior documentation in specs/001-close-domain-tabs/contracts/extension-behavior.md
-- [ ] T031 [US3] Validate message handling origin and safe response semantics in src/background.ts
+- [x] T029 [US3] Enforce non-http(s) and invalid URL no-op handling in src/background.ts
+- [x] T030 [US3] Enforce no-persist/no-telemetry behavior documentation in specs/001-close-domain-tabs/contracts/extension-behavior.md
+- [x] T031 [US3] Validate message handling origin and safe response semantics in src/background.ts
 
 **Checkpoint**: All user stories are independently functional and safety constraints are enforced.
 
@@ -118,10 +118,10 @@ description: 'Task list for implementing cross-browser domain tab close'
 
 **Purpose**: Final consistency, validation, and release readiness.
 
-- [ ] T032 [P] Run full verification gate and resolve failures via npm scripts in package.json
-- [ ] T033 [P] Validate quickstart flow against actual outputs in specs/001-close-domain-tabs/quickstart.md
-- [ ] T034 Reconcile feature documentation and requirements language in REQUIREMENTS.md
-- [ ] T035 Reconcile agent guidance updates for this feature in AGENTS.md
+- [x] T032 [P] Run full verification gate and resolve failures via npm scripts in package.json
+- [x] T033 [P] Validate quickstart flow against actual outputs in specs/001-close-domain-tabs/quickstart.md
+- [x] T034 Reconcile feature documentation and requirements language in REQUIREMENTS.md
+- [x] T035 Reconcile agent guidance updates for this feature in AGENTS.md
 
 ---
 

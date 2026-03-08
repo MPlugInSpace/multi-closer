@@ -1,5 +1,4 @@
 import { queryTabs } from '../shared/chrome-async';
-import { closeMatchingTabs } from '../shared/close-tabs';
 import { getHost } from '../shared/domain';
 
 const setState = (host: string | null): void => {
@@ -57,7 +56,8 @@ const init = async (): Promise<void> => {
     if (!host) {
       return;
     }
-    await closeMatchingTabs(host);
+
+    await chrome.runtime.sendMessage({ type: 'close-matching-tabs', host });
     window.close();
   });
 };

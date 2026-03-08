@@ -1,7 +1,14 @@
 dist/
+dist-firefox/
 dist-test/
 node_modules/
 e2e/.user-data/
 downloads/
 downloaded_artifact/
 downloaded_artifact_new/
+downloaded_artifact_latest/
+downloaded_artifact_firefox/
+.github/agents/
+.github/prompts/
+.opencode/
+.vscode/

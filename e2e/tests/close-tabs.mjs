@@ -23,6 +23,9 @@ export const run = async ({ context, port, extensionId }) => {
   await pageB.goto(`http://sub.example.test:${port}`);
   await pageC.goto(`http://other.test:${port}`);
 
+  const pageD = await context.newPage();
+  await pageD.goto('chrome://extensions');
+
   await pageA.bringToFront();
 
   const runner = await context.newPage();
@@ -49,9 +52,10 @@ export const run = async ({ context, port, extensionId }) => {
       const urls = context.pages().map((p) => p.url());
       const noExample = !urls.some((u) => u.includes('example.test'));
       const hasOther = urls.some((u) => u.includes('other.test'));
-      return Promise.resolve(noExample && hasOther);
+      const hasChromeInternal = urls.some((u) => u.startsWith('chrome://extensions'));
+      return Promise.resolve(noExample && hasOther && hasChromeInternal);
     },
-    { label: 'example.test tabs removed, other.test tab remaining' },
+    { label: 'example tabs removed while other and chrome internal tabs remain' },
   );
 
   await runner.close();

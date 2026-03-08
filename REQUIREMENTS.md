@@ -65,6 +65,8 @@ Multi Close is a cross-browser WebExtension for Chrome, Firefox, and Edge that a
 - Feature branch prereleases for `feature/*` with SemVer prerelease component.
 - `main` builds produce release versions without prerelease component.
 - Automatic version bumping required; semver level chosen by agents.
+- Packaging artifacts must include Chromium (`dist/`) and Firefox-compatible
+  (`dist-firefox/`) install targets for local validation.
 
 ## Future Considerations (tracked in TODO.md)
 

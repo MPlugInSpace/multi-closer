@@ -2,6 +2,10 @@ import { queryTabs, removeTabs } from './chrome-async';
 import { getHost, isMatchingHost } from './domain';
 
 export const closeMatchingTabs = async (rootHost: string): Promise<number> => {
+  if (rootHost.trim() === '') {
+    return 0;
+  }
+
   const tabs = await queryTabs({});
   const toClose = tabs
     .filter((tab) => {

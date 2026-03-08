@@ -107,4 +107,26 @@ describe('closeMatchingTabs', () => {
     expect(mockRemoveTabs).toHaveBeenCalledWith([2]);
     expect(count).toBe(1);
   });
+
+  it('matches hosts case-insensitively and with trailing dot normalization', async () => {
+    mockQueryTabs.mockResolvedValue([
+      makeTab(1, 'https://Example.com./page'),
+      makeTab(2, 'https://Sub.Example.com/path'),
+      makeTab(3, 'https://other.com/'),
+    ]);
+
+    const count = await closeMatchingTabs('example.com');
+
+    expect(mockRemoveTabs).toHaveBeenCalledWith([1, 2]);
+    expect(count).toBe(2);
+  });
+
+  it('returns zero when root host is empty', async () => {
+    mockQueryTabs.mockResolvedValue([makeTab(1, 'https://example.com/')]);
+
+    const count = await closeMatchingTabs('');
+
+    expect(mockRemoveTabs).not.toHaveBeenCalled();
+    expect(count).toBe(0);
+  });
 });

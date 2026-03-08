@@ -1,6 +1,6 @@
 import { createContextMenu, getTab, queryTabs, updateContextMenu } from './shared/chrome-async';
 import { closeMatchingTabs } from './shared/close-tabs';
-import { getHost } from './shared/domain';
+import { getCloseMenuTitle, getHost } from './shared/domain';
 
 const MENU_ID = 'close-tabs-by-domain';
 
@@ -18,7 +18,7 @@ const getActiveTab = async (windowId?: number): Promise<chrome.tabs.Tab | null> 
 
 const updateMenuTitle = async (tab?: chrome.tabs.Tab): Promise<void> => {
   const host = tab?.url ? getHost(tab.url) : null;
-  const title = host ? `Close all tabs from ${host}` : 'Close all tabs from <domain>';
+  const title = getCloseMenuTitle(host);
   try {
     await updateContextMenu(MENU_ID, { title });
   } catch {
@@ -49,7 +49,7 @@ const handleClick = async (tab?: chrome.tabs.Tab): Promise<void> => {
 const createMenu = async (): Promise<void> => {
   // Try updating first in case the menu already exists; otherwise create it.
   try {
-    await updateContextMenu(MENU_ID, { title: 'Close all tabs from <domain>' });
+    await updateContextMenu(MENU_ID, { title: getCloseMenuTitle(null) });
     return;
   } catch {
     // fallthrough to create if update failed (menu not found)
@@ -57,7 +57,7 @@ const createMenu = async (): Promise<void> => {
 
   await createContextMenu({
     id: MENU_ID,
-    title: 'Close all tabs from <domain>',
+    title: getCloseMenuTitle(null),
     contexts: MENU_CONTEXTS,
   });
 };

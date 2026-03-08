@@ -32,6 +32,11 @@ Build the extension:
 npm run build
 ```
 
+Build output includes:
+
+- `dist/` for Chromium-family browsers (Chrome/Edge)
+- `dist-firefox/` for Firefox temporary install compatibility
+
 Run tests:
 
 ```bash

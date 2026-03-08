@@ -2,36 +2,19 @@
 (() => {
   // src/shared/chrome-async.ts
   var queryTabs = (query) => chrome.tabs.query(query);
-  var removeTabs = (tabIds) => chrome.tabs.remove(tabIds);
 
   // src/shared/domain.ts
   var isHttpUrl = (url) => url.startsWith("http://") || url.startsWith("https://");
+  var normalizeHost = (host) => host.trim().toLowerCase().replace(/\.$/, "");
   var getHost = (url) => {
     if (!isHttpUrl(url)) {
       return null;
     }
     try {
-      return new URL(url).host;
+      return normalizeHost(new URL(url).host);
     } catch {
       return null;
     }
-  };
-  var isMatchingHost = (targetHost, candidateHost) => {
-    return candidateHost === targetHost || candidateHost.endsWith(`.${targetHost}`);
-  };
-
-  // src/shared/close-tabs.ts
-  var closeMatchingTabs = async (rootHost) => {
-    const tabs = await queryTabs({});
-    const toClose = tabs.filter((tab) => {
-      if (typeof tab.url !== "string") return false;
-      const host = getHost(tab.url);
-      return host ? isMatchingHost(rootHost, host) : false;
-    }).map((tab) => tab.id).filter((id) => typeof id === "number");
-    if (toClose.length > 0) {
-      await removeTabs(toClose);
-    }
-    return toClose.length;
   };
 
   // src/popup/popup.ts
@@ -81,7 +64,7 @@
       if (!host) {
         return;
       }
-      await closeMatchingTabs(host);
+      await chrome.runtime.sendMessage({ type: "close-matching-tabs", host });
       window.close();
     });
   };

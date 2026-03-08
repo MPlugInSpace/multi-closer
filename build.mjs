@@ -130,7 +130,7 @@ const main = async () => {
         JSON.stringify(ffManifest, null, 2),
         'utf8',
       );
-    } catch (err) {
+    } catch {
       // If anything fails, fall back to copying manifest.json
       await cp(join(srcDir, 'manifest.json'), join(firefoxDist, 'manifest.json'));
     }
