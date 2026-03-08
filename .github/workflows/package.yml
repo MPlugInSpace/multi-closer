@@ -31,9 +31,14 @@ jobs:
             ART_VERSION="$VERSION-${SANITIZED}.${{ github.run_number }}"
           fi
           ART_NAME="multi-closer-${ART_VERSION}.zip"
-          # zip the dist/ directory into the artifact
-          cd dist
-          zip -r "../${ART_NAME}" .
+          # zip both dist/ (Chrome MV3) and dist-firefox/ (Firefox MV2 temporary
+          # install) into the artifact so consumers can load the correct variant
+          # for their browser.
+          zip -r "../${ART_NAME}" dist dist-firefox || (
+            # Fallback: if dist-firefox doesn't exist on CI for some reason,
+            # still package dist/ so Chrome users can test.
+            cd dist && zip -r "../${ART_NAME}" .
+          )
           cd ..
           echo "artifact=${ART_NAME}" >> $GITHUB_OUTPUT
           echo "artifact_name=${ART_NAME}" >> $GITHUB_ENV
