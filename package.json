@@ -7,7 +7,7 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "prepare": "husky install",
+    "prepare": "husky install || true",
     "build": "node build.mjs",
     "lint": "eslint \"src/**/*.ts\" \"tests/**/*.ts\" \"**/*.mjs\"",
     "format": "prettier --write .",

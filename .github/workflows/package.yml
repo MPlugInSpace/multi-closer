@@ -8,6 +8,8 @@ on:
 jobs:
   package:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
@@ -35,9 +37,30 @@ jobs:
           cd ..
           echo "artifact=${ART_NAME}" >> $GITHUB_OUTPUT
           echo "artifact_name=${ART_NAME}" >> $GITHUB_ENV
+          echo "art_version=${ART_VERSION}" >> $GITHUB_ENV
       - name: Upload packaged artifact
+        if: ${{ github.ref_name != 'main' }}
         uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: ${{ env.artifact_name }}
           path: ${{ env.artifact_name }}
           retention-days: 7
+
+      - name: Create draft release and attach artifact
+        if: ${{ github.ref_name == 'main' }}
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: v${{ env.art_version }}
+          release_name: v${{ env.art_version }}
+          draft: true
+          prerelease: false
+
+      - name: Upload artifact to draft release
+        if: ${{ github.ref_name == 'main' }}
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.artifact_name }}
+          asset_name: ${{ env.artifact_name }}
+          asset_content_type: application/zip

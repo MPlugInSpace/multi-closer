@@ -4,6 +4,9 @@ import { getHost } from './shared/domain';
 
 const MENU_ID = 'close-tabs-by-domain';
 
+/** Contexts where the menu item should appear. */
+const MENU_CONTEXTS: chrome.contextMenus.ContextType[] = ['page', 'action'];
+
 const getActiveTab = async (windowId?: number): Promise<chrome.tabs.Tab | null> => {
   const query: chrome.tabs.QueryInfo = { active: true };
   if (windowId !== undefined) {
@@ -22,14 +25,7 @@ const updateMenuTitle = async (tab?: chrome.tabs.Tab): Promise<void> => {
     // If the menu doesn't exist yet, attempt to create it. Creation may fail
     // if another concurrent startup path creates the menu — ignore errors.
     try {
-      await createContextMenu({
-        id: MENU_ID,
-        title,
-        contexts: [
-          'tab' as unknown as chrome.contextMenus.ContextType,
-          'action' as unknown as chrome.contextMenus.ContextType,
-        ],
-      });
+      await createContextMenu({ id: MENU_ID, title, contexts: MENU_CONTEXTS });
     } catch {
       // ignore
     }
@@ -62,11 +58,7 @@ const createMenu = async (): Promise<void> => {
   await createContextMenu({
     id: MENU_ID,
     title: 'Close all tabs from <domain>',
-    // show the menu in the tab context (right-click a tab) and also on the extension action
-    contexts: [
-      'tab' as unknown as chrome.contextMenus.ContextType,
-      'action' as unknown as chrome.contextMenus.ContextType,
-    ],
+    contexts: MENU_CONTEXTS,
   });
 };
 
@@ -140,10 +132,8 @@ chrome.tabs.onUpdated.addListener((_tabId, changeInfo, tab) => {
   }
 });
 
-// Ensure menu exists when the service worker starts (dev/load-unpacked flows may not
-// trigger onInstalled). This is a best-effort call — ignore startup errors.
-try {
-  void createMenu().then(syncMenuTitle);
-} catch {
-  // ignore
-}
+// Ensure menu exists when the service worker starts (dev/load-unpacked flows
+// may not trigger onInstalled). Best-effort — ignore startup errors.
+void createMenu()
+  .then(syncMenuTitle)
+  .catch(() => {});

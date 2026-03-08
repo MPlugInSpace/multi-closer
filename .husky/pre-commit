@@ -1,1 +1,4 @@
-#!/bin/sh\n. ""/bin/_/husky.sh"\n\nnpm test\n
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+npm test
