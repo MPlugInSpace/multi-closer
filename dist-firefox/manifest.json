@@ -1,0 +1,26 @@
+{
+  "manifest_version": 2,
+  "name": "Multi Close",
+  "version": "0.1.0",
+  "description": "Close all tabs from the same domain",
+  "permissions": [
+    "tabs",
+    "contextMenus",
+    "windows"
+  ],
+  "background": {
+    "scripts": [
+      "background-firefox.js"
+    ]
+  },
+  "action": {
+    "default_title": "Multi Close",
+    "default_popup": "popup/popup.html"
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  }
+}
