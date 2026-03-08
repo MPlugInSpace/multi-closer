@@ -16,6 +16,10 @@ Close all tabs from the same domain as a selected tab.
 
 ## Development
 
+Constitution and governance guidance lives in
+`.specify/memory/constitution.md`. Any feature/spec/plan/tasks output should
+align with its privacy, cross-browser, and verification gates.
+
 Install dependencies:
 
 ```bash
