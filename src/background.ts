@@ -5,7 +5,7 @@ import { getHost } from './shared/domain';
 const MENU_ID = 'close-tabs-by-domain';
 
 /** Contexts where the menu item should appear. */
-const MENU_CONTEXTS: chrome.contextMenus.ContextType[] = ['page', 'action'];
+const MENU_CONTEXTS: chrome.contextMenus.CreateProperties['contexts'] = ['page', 'action'];
 
 const getActiveTab = async (windowId?: number): Promise<chrome.tabs.Tab | null> => {
   const query: chrome.tabs.QueryInfo = { active: true };

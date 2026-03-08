@@ -7,7 +7,7 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "prepare": "husky install || true",
+    "prepare": "husky || true",
     "build": "node build.mjs",
     "lint": "eslint \"src/**/*.ts\" \"tests/**/*.ts\" \"**/*.mjs\"",
     "format": "prettier --write .",
@@ -19,11 +19,11 @@
     "icons": "node scripts/generate-icons.mjs"
   },
   "devDependencies": {
-    "husky": "^8.0.3",
     "@types/chrome": "^0.1.37",
     "@vitest/coverage-v8": "^4.0.18",
     "esbuild": "^0.27.3",
     "eslint": "^10.0.2",
+    "husky": "^9.1.7",
     "playwright": "^1.47.2",
     "prettier": "^3.3.3",
     "typescript": "^5.6.2",
